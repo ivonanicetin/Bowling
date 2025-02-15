@@ -4,13 +4,14 @@ public class BallController : MonoBehaviour
 {
     [SerializeField] private float force = 1f;
     [SerializeField] private InputManager inputManager;
+    [SerializeField] private Transform ballAnchor;
 
 
     // name booleans like a question
     private bool isBallLaunched;
     private Rigidbody ballRB;
-    //private InputManager inputManager;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    
+    
     void Start()
     {
         //Grabbing a reference to RigidBody
@@ -19,6 +20,9 @@ public class BallController : MonoBehaviour
         // When the space key is pressed the
         // LaunchBall method will be called.
         inputManager.OnSpacePressed.AddListener(LaunchBall);
+        transform.parent = ballAnchor;
+        transform.localPosition = Vector3.zero;
+        ballRB.isKinematic = true;
     }
 
     private void LaunchBall()
@@ -28,6 +32,8 @@ public class BallController : MonoBehaviour
         if (isBallLaunched) return;
         // "now that the ball is not launched, set it to true and launch the ball"
         isBallLaunched = true;
+        transform.parent = null;
+        ballRB.isKinematic = false;
         ballRB.AddForce(transform.forward * force, ForceMode.Impulse);
     }
 
